@@ -8,6 +8,16 @@ module.exports = {
     extend: {
       colors: {
         'dblue': '#1E213A',
+        'light-blue': '#3C47E9',
+        'light-gray': '#A09FB1',
+        darkSidebar: {
+          text: 'white',
+          background: 'black',
+        },
+        sidebar: {
+          text: 'black',
+          background: 'white',
+        },
       },
       backgroundImage: theme => ({
         //'img': "url('/src/assets/img.svg')",
