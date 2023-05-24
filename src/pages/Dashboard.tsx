@@ -1,12 +1,26 @@
+import { relative } from "path";
+import LineChart from "../components/LineChart";
+
+
 const Dashboard = () => {
   const body_colorset = "text-black bg-gray-100 dark:bg-gray-500 dark:text-white ";
   const body_colorset2 = "text-black bg-white-500 dark:bg-gray-700 dark:text-white ";
+  const chartHeight = 200;
+
   return (
     <div className="flex flex-grow flex-col">
       {/* Top Row */}
       <div className={`${body_colorset} flex flex-wrap justify-between py-4 px-2`}>
-        <div className="w-full sm:w-1/2 md:w-1/4">Column 1</div>
-        <div className="w-full sm:w-1/2 md:w-1/4">Column 2</div>
+        <div className="w-full sm:w-1/2 md:w-1/4">
+          <div style={{position:"relative", height: chartHeight, width: '100%' }}>
+            <LineChart />
+          </div>
+        </div>
+        <div className="w-full sm:w-1/2 md:w-1/4">
+        <div style={{position:"relative", height: chartHeight, width: '100%' }}>
+            <LineChart />
+          </div>
+        </div>
         <div className="w-full sm:w-1/2 md:w-1/4">Column 3</div>
         <div className="w-full sm:w-1/2 md:w-1/4">Column 4</div>
       </div>
