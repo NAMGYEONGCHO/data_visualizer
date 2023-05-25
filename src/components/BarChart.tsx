@@ -1,60 +1,68 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
+import useMeasure from "react-use-measure";
 import * as d3 from 'd3';
 
-  type DataPoint = {
-    label: string;
-    value: number;
-  };
-  
-  type BarChartProps = {
-    data: DataPoint[];
-    width: number;
-    height: number;
-    barColor: string;
-  };
-  
-  const BarChart: React.FC<BarChartProps> = ({ data, width, height, barColor }) => {
-  const chartRef = useRef(null);
+const data = [
+  { name: "Apple", value: 20 },
+  { name: "Banana", value: 12 },
+  { name: "Cherry", value: 15 },
+  { name: "Dates", value: 25 },
+  { name: "Elderberry", value: 18 },
+];
+
+function BarChart() {
+  const ref = useRef(null);
 
   useEffect(() => {
-    const svg = d3.select(chartRef.current)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height);
+    if (ref.current) {
+      const svg = d3.select(ref.current);
 
-    const xScale = d3.scaleBand()
-      .domain(data.map((d) => d.label))
-      .range([0, width])
-      .padding(0.2);
-
+      // Define scales
+      const xScale = d3.scaleBand()
+        .domain(data.map((d) => d.name))
+        .range([0, 160])
+        .padding(0.2);
+      
       const yScale = d3.scaleLinear()
-      .domain([0, d3.max(data, (d) => d.value) || 0])
-      .range([height, 0]);
+        .domain([0, 30]) // ideally use max(data, d => d.value)
+        .range([150, 0]); // 150 is the height of the graph
 
-    const xAxis = d3.axisBottom(xScale);
-    const yAxis = d3.axisLeft(yScale).ticks(5);
+      // Draw the bars
+      svg
+        .selectAll('rect')
+        .data(data)
+        .join('rect')
+        .attr('x', (d) => xScale(d.name) ?? 0)  // default to 0 if xScale(d.name) is undefined
+        .attr('y', (d) => yScale(d.value) ?? 0) // default to 0 if yScale(d.value) is undefined
+        .attr('height', (d) => 150 - (yScale(d.value) ?? 150))
+        .attr('width', xScale.bandwidth())
+        .attr('class', 'fill-current dark:text-red-500 text-purple-500');
 
-    svg.append('g')
-      .attr('transform', `translate(0, ${height})`)
-      .call(xAxis);
+        // Draw the axes
+        // create axis generators
+        const xAxis = d3.axisBottom(xScale);
+        const yAxis = d3.axisLeft(yScale);
 
-    svg.append('g')
-      .call(yAxis);
+        svg.append("g")
+            .attr("transform", `translate(0,150)`)
+            .call(xAxis)
+            .attr("class", "x-axis");
 
-      svg.selectAll('.bar')
-      .data(data)
-      .enter()
-      .append('rect')
-      .attr('class', 'bar')
-      .attr('x', (d) => xScale(d.label) ?? 0)
-      .attr('y', (d) => yScale(d.value) ?? 0)
-      .attr('width', xScale.bandwidth())
-      .attr('height', (d) => height - (yScale(d.value) ?? 0))
-      .attr('fill', barColor);
-    
-  }, [data, width, height, barColor]);
+        svg.append("g")
+            .attr("transform", `translate(0,0)`)
+            .call(yAxis)
+            .attr("class", "y-axis");
+    }
+  }, []);
 
-  return <div ref={chartRef}></div>;
-};
+  return (
+    <div className="flex justify-center items-center bg-gray-200 h-full">
+      <svg ref={ref} style={{ background: '#eee' }} width={'100%'} height={200}>
+        <g className="x-axis" />
+        <g className="y-axis" />
+      </svg>
+    </div>
+  );
+}
 
 export default BarChart;

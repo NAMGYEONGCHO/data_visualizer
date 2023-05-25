@@ -42,12 +42,6 @@ const tooltipStyles = {
     left: 0,
     right: 'auto',
     bottom: 'auto',
-    '@media (min-width: 1024px)': { // corresponds to 'lg:' in Tailwind
-      top: 'auto',
-      left: 'auto',
-      bottom: 0,
-      right: 0
-    },
   borderRadius: 4,
   background: "#161434",
   color: "#ADADD3",
@@ -58,8 +52,7 @@ const tooltipStyles = {
 const Chart = () => {
   const { data, error, isLoading } = useQuery<Data[]>("prices", getPrices);
   const [ref, { width, height }] = useMeasure();
-  console.log('width, height' );
-  console.log(width, height );
+  
   const {
     showTooltip,
     hideTooltip,
