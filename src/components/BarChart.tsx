@@ -1,67 +1,83 @@
-import React, { useRef, useEffect } from 'react';
-import useMeasure from "react-use-measure";
-import * as d3 from 'd3';
 
-const data = [
-  { name: "Apple", value: 20 },
-  { name: "Banana", value: 12 },
-  { name: "Cherry", value: 15 },
-  { name: "Dates", value: 25 },
-  { name: "Elderberry", value: 18 },
-];
+import appleStock, { AppleStock } from '@visx/mock-data/lib/mocks/appleStock';
+import useMeasure from 'react-use-measure';
+import { scaleBand, scaleLinear } from '@visx/scale';
+import {Group} from '@visx/group';
+import {AxisLeft, AxisBottom } from "@visx/axis";
+import {Bar} from "@visx/shape";
+
+
+const data = appleStock.slice(0, 10)
+
+const margin = 32;
+const defaultWidth = 100;
+const defaultHeight = 100; 
+
+const getXValue = (d: AppleStock) => d.date;
+const getYValue = (d: AppleStock) => d.close;
 
 function BarChart() {
-  const ref = useRef(null);
+  const [ ref, bounds ]  = useMeasure();
 
-  useEffect(() => {
-    if (ref.current) {
-      const svg = d3.select(ref.current);
+  const width = bounds.width || defaultWidth;
+  const height = bounds.height || defaultHeight;
 
-      // Define scales
-      const xScale = d3.scaleBand()
-        .domain(data.map((d) => d.name))
-        .range([0, 160])
-        .padding(0.2);
-      
-      const yScale = d3.scaleLinear()
-        .domain([0, 30]) // ideally use max(data, d => d.value)
-        .range([150, 0]); // 150 is the height of the graph
+  const innerWidth = width - margin;
+  const innerHeight = height - margin;
 
-      // Draw the bars
-      svg
-        .selectAll('rect')
-        .data(data)
-        .join('rect')
-        .attr('x', (d) => xScale(d.name) ?? 0)  // default to 0 if xScale(d.name) is undefined
-        .attr('y', (d) => yScale(d.value) ?? 0) // default to 0 if yScale(d.value) is undefined
-        .attr('height', (d) => 150 - (yScale(d.value) ?? 150))
-        .attr('width', xScale.bandwidth())
-        .attr('class', 'fill-current dark:text-red-500 text-purple-500');
+  const xScale = scaleBand<string>({
+    range: [margin, innerWidth],
+    domain: data.map(getXValue),
+    padding: 0.2
+  });
 
-        // Draw the axes
-        // create axis generators
-        const xAxis = d3.axisBottom(xScale);
-        const yAxis = d3.axisLeft(yScale);
-
-        svg.append("g")
-            .attr("transform", `translate(0,150)`)
-            .call(xAxis)
-            .attr("class", "x-axis");
-
-        svg.append("g")
-            .attr("transform", `translate(0,0)`)
-            .call(yAxis)
-            .attr("class", "y-axis");
-    }
-  }, []);
+  const yScale = scaleLinear<number>({
+    range: [innerHeight , margin ],
+    domain: [
+      Math.min(...data.map(getYValue)) - 1,
+      Math.max(...data.map(getYValue)) + 1,
+    ],
+    
+  })
 
   return (
-    <div className="flex justify-center items-center bg-gray-200 h-full">
-      <svg ref={ref} style={{ background: '#eee' }} width={'100%'} height={200}>
-        <g className="x-axis" />
-        <g className="y-axis" />
-      </svg>
-    </div>
+    <svg
+      ref={ref}
+      width="100%"
+      height="100%"
+      viewBox={`0 0 ${width} ${height}`}
+    >
+    <Group>{data.map((d) => {
+      const xValue = getXValue(d);
+      const barWidth = xScale.bandwidth();
+      const barHeight = innerHeight - (yScale(getYValue(d)) ?? 0);
+
+      const barX = xScale(xValue);
+      const barY = innerHeight - barHeight;
+
+      return (
+        <Bar 
+          key={`bar-${xValue}`}
+          x={barX}
+          y={barY}
+          width={barWidth}
+          height={barHeight}
+          fill="orange"
+        />
+
+        
+      )
+    })}
+      Bottom
+      </Group>
+      <Group>
+        <AxisBottom top={innerHeight} scale={xScale} />
+      </Group>
+      <Group>
+      <AxisLeft left={margin} scale={yScale} />
+      </Group>
+      
+    </svg>
   );
 }
 
