@@ -1,3 +1,4 @@
+import { useTheme } from '../ThemeContext';
 import { TouchEvent, MouseEvent } from "react";
 import { useQuery } from "react-query";
 import useMeasure from "react-use-measure";
@@ -11,7 +12,7 @@ import { Bar, Line, LinePath } from "@visx/shape";
 import { curveMonotoneX } from "@visx/curve";
 
 type Data = [number, number];
-  
+
 const getPrices = async () => {
   const res = await fetch(
     "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
@@ -30,9 +31,7 @@ const formatter = new Intl.NumberFormat("en-US", {
 });
 
 const getXValue = (d: Data) => new Date(d[0]);
-
 const getYValue = (d: Data) => d[1];
-
 const bisectDate = bisector<Data, Date>(getXValue).left;
 
 const tooltipStyles = {
@@ -52,7 +51,10 @@ const tooltipStyles = {
 const Chart = () => {
   const { data, error, isLoading } = useQuery<Data[]>("prices", getPrices);
   const [ref, { width, height }] = useMeasure();
+  const { nightMode } = useTheme();
   
+  const strokeColor = nightMode === 'dark' ? 'white' : '#2569c3';
+
   const {
     showTooltip,
     hideTooltip,
@@ -81,7 +83,7 @@ const Chart = () => {
     ],
     nice: true,
   });
-
+  
   return (
     <>
       <svg
@@ -89,13 +91,15 @@ const Chart = () => {
         width="100%"
         height="100%"
         viewBox={`0 0 ${width} ${height}`}
+        className={`relative rounded-md text-black bg-white dark:bg-gray-700 dark:text-white`}
       >
         <Group>
           <LinePath<Data>
+            key={nightMode}
             data={data}
             x={(d) => xScale(getXValue(d)) ?? 0}
             y={(d) => yScale(getYValue(d)) ?? 0}
-            stroke="#23DBBD"
+            stroke={strokeColor}
             strokeWidth={2}
             curve={curveMonotoneX}
           />

@@ -16,8 +16,12 @@ module.exports = {
         },
         sidebar: {
           text: 'black',
-          background: 'white',
+          background: ' #f3e5bc',
         },
+      },
+      backgroundColor: {
+        light: '#FFFCF5',
+        sunlight: 'FFFF07',
       },
       backgroundImage: theme => ({
         //'img': "url('/src/assets/img.svg')",

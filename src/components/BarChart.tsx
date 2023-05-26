@@ -1,5 +1,6 @@
 
 import appleStock, { AppleStock } from '@visx/mock-data/lib/mocks/appleStock';
+import { useTheme } from '../ThemeContext';
 import useMeasure from 'react-use-measure';
 import { scaleBand, scaleLinear } from '@visx/scale';
 import {Group} from '@visx/group';
@@ -18,6 +19,9 @@ const getYValue = (d: AppleStock) => d.close;
 
 function BarChart() {
   const [ ref, bounds ]  = useMeasure();
+  const { nightMode } = useTheme();
+  
+  const barColor = nightMode === 'dark' ? 'orange' : '#2569c3';
 
   const width = bounds.width || defaultWidth;
   const height = bounds.height || defaultHeight;
@@ -46,6 +50,7 @@ function BarChart() {
       width="100%"
       height="100%"
       viewBox={`0 0 ${width} ${height}`}
+      className={`relative rounded-md text-black bg-white dark:bg-gray-700 dark:text-white`}
     >
     <Group>{data.map((d) => {
       const xValue = getXValue(d);
@@ -62,7 +67,7 @@ function BarChart() {
           y={barY}
           width={barWidth}
           height={barHeight}
-          fill="orange"
+          fill={barColor}
         />
 
         
@@ -71,7 +76,7 @@ function BarChart() {
       Bottom
       </Group>
       <Group>
-        <AxisBottom top={innerHeight} scale={xScale} />
+        <AxisBottom top={innerHeight} scale={xScale} axisClassName={`text-red`}/>
       </Group>
       <Group>
       <AxisLeft left={margin} scale={yScale} />
