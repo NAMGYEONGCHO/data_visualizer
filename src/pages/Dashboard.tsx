@@ -1,5 +1,6 @@
 import LineChart from "../components/LineChart";
 import BarChart from "../components/BarChart";
+import PieChart from "../components/PieChart";
 
 
 const Dashboard = () => {
@@ -23,7 +24,7 @@ const Dashboard = () => {
         </div>
         <div className={`w-full sm:w-1/2 md:w-1/4 rounded-md relative p-1`}>
           <div style={{height: chartHeight200}}>
-            <BarChart/>
+            <PieChart data={[{label: 'APPLE', value: 12},{label: 'PINE', value: 32}]} />
           </div>
         </div>
         <div className={`w-full sm:w-1/2 md:w-1/4 rounded-md relative p-1`}>
