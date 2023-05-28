@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useTheme } from '../ThemeContext';
+import { useTheme } from '../../ThemeContext';
 import * as d3 from 'd3';
 import useMeasure from 'react-use-measure';
 

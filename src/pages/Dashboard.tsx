@@ -1,8 +1,11 @@
-import LineChart from "../components/LineChart";
-import BarChart from "../components/BarChart";
-import PieChart from "../components/PieChart";
+import LineChart from "../components/charts/LineChart";
+import BarChart from "../components/charts/BarChart";
+import PieChart from "../components/charts/PieChart";
+import ScatterPlotChart from "../components/charts/ScatterPlotChart";
 
-const pieData = [{label: 'Apple', value: 12},{label: 'Pine', value: 32},{label: 'Mango', value: 22},{label: 'Berry', value: 8}]
+const pieData = [{label: 'Apple', value: 12},{label: 'Avocado', value: 32},{label: 'Mango', value: 22},{label: 'Berry', value: 8}]
+const scatterPlotData = [{x: 12, y: 13},{x: 14, y: 15},{x: 10, y: 12},{x: 4, y: 8},{x: 23, y: 12},{x: 24, y: 45},{x: 23, y: 54},{x: 23, y: 34}];
+
 const Dashboard = () => {
   const chartHeight200 = 200;
   const chartHeight300 = 300;
@@ -29,7 +32,7 @@ const Dashboard = () => {
         </div>
         <div className={`w-full sm:w-1/2 md:w-1/4 rounded-md relative p-1`}>
           <div style={{height: chartHeight200}}>
-            <BarChart/>
+            <ScatterPlotChart data={scatterPlotData}/>
           </div>
         </div>
       </div>

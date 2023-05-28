@@ -1,6 +1,6 @@
 
 import appleStock, { AppleStock } from '@visx/mock-data/lib/mocks/appleStock';
-import { useTheme } from '../ThemeContext';
+import { useTheme } from '../../ThemeContext';
 import useMeasure from 'react-use-measure';
 import { scaleBand, scaleLinear } from '@visx/scale';
 import {Group} from '@visx/group';

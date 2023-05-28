@@ -1,4 +1,4 @@
-import { useTheme } from '../ThemeContext';
+import { useTheme } from '../../ThemeContext';
 import { TouchEvent, MouseEvent } from "react";
 import { useQuery } from "react-query";
 import useMeasure from "react-use-measure";
