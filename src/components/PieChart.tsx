@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { useTheme } from '../ThemeContext';
 import * as d3 from 'd3';
 import useMeasure from 'react-use-measure';
 
@@ -9,6 +10,9 @@ interface PieProps {
 const PieChart: React.FC<PieProps> = ({ data }) => {
   const [ref, { width, height }] = useMeasure();
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const { nightMode } = useTheme();
+
+  const textColor = nightMode === 'dark' ? 'white' : 'black';
 
   useEffect(() => {
     if (!width || !height || !svgRef.current) return; // Skip if width, height, or svgRef are not yet set
@@ -31,6 +35,7 @@ const PieChart: React.FC<PieProps> = ({ data }) => {
       .innerRadius(0)
       .outerRadius(Math.min(width, height) / 2);
 
+    // Create pie
     group
       .selectAll('path')
       .data(pieGenerator(data))
@@ -38,11 +43,29 @@ const PieChart: React.FC<PieProps> = ({ data }) => {
       .attr('d', arcGenerator as any) // There is currently an issue with d3 type definitions for arc generators
       .style("fill", (_, i) => colorScale(i.toString()));
 
-  }, [data, width, height]);
+    // Create labels
+    const labelArcGenerator = d3.arc<{ label: string, value: number }>()
+      .innerRadius(Math.min(width, height) / 4 ) // Here, you can adjust the position of labels by changing the innerRadius
+      .outerRadius(Math.min(width, height) / 4);
+
+    group
+      .selectAll('text')
+      .data(pieGenerator(data))
+      .join('text')
+      .attr("transform", d => `translate(${labelArcGenerator.centroid(d as any)})`)
+      .attr("text-anchor", "middle")
+      .attr("fill", textColor)
+      .text(d => `${d.data.label}: ${d.data.value}`)
+
+  }, [data, width, height, textColor]);
 
   return (
     <div ref={ref} className="relative w-full h-full">
-      <svg ref={svgRef} className={`absolute top-0 left-0 w-full h-full`} viewBox={`0 0 ${width} ${height}`} />
+      <svg 
+        ref={svgRef} 
+        viewBox={`0 0 ${width} ${height}`} 
+        className={`relative rounded-md text-xs text-white bg-white dark:bg-gray-700 dark:text-white`}
+      />
     </div>
   );
 }
