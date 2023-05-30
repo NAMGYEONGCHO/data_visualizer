@@ -20,7 +20,7 @@ module.exports = {
         },
       },
       backgroundColor: {
-        light: '#FFFCF5',
+        light: '#f3e5bc',
         sunlight: 'FFFF07',
       },
       backgroundImage: theme => ({

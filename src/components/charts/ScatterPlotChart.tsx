@@ -65,7 +65,7 @@ const ScatterPlot: React.FC<ScatterProps> = ({ data }) => {
     <div ref={ref} className="relative w-full h-full">
       <svg 
         ref={svgRef} 
-        className={`absolute top-0 left-0 rounded-md w-full h-full text-white bg-white dark:bg-gray-700 dark:text-white`} 
+        className={`absolute top-0 left-0 rounded-md w-full h-full text-black bg-gray-200 dark:bg-gray-700 dark:text-white`} 
         viewBox={`0 0 ${width} ${height}`} />
     </div>
   );

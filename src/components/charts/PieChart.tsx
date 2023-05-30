@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+
 import { useTheme } from '../../ThemeContext';
 import * as d3 from 'd3';
 import useMeasure from 'react-use-measure';
@@ -43,20 +44,6 @@ const PieChart: React.FC<PieProps> = ({ data }) => {
       .attr('d', arcGenerator as any) // There is currently an issue with d3 type definitions for arc generators
       .style("fill", (_, i) => colorScale(i.toString()));
 
-    // Create labels
-    const labelArcGenerator = d3.arc<{ label: string, value: number }>()
-      .innerRadius(Math.min(width, height) / 4 ) // Here, you can adjust the position of labels by changing the innerRadius
-      .outerRadius(Math.min(width, height) / 4);
-
-    group
-      .selectAll('text')
-      .data(pieGenerator(data))
-      .join('text')
-      .attr("transform", d => `translate(${labelArcGenerator.centroid(d as any)})`)
-      .attr("text-anchor", "middle")
-      .attr("fill", textColor)
-      .text(d => `${d.data.label}: ${d.data.value}`)
-
   }, [data, width, height, textColor]);
 
   return (
@@ -64,7 +51,7 @@ const PieChart: React.FC<PieProps> = ({ data }) => {
       <svg 
         ref={svgRef} 
         viewBox={`0 0 ${width} ${height}`} 
-        className={`relative rounded-md text-xs text-white bg-white dark:bg-gray-700 dark:text-white`}
+        className={`relative rounded-md text-xs text-white bg-gray-200 dark:bg-gray-700 dark:text-white`}
       />
     </div>
   );

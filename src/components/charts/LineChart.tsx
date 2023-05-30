@@ -1,6 +1,5 @@
 import { useTheme } from '../../ThemeContext';
 import { TouchEvent, MouseEvent } from "react";
-import { useQuery } from "react-query";
 import useMeasure from "react-use-measure";
 import { TooltipWithBounds, useTooltip, defaultStyles } from "@visx/tooltip";
 import { timeFormat } from "d3-time-format";
@@ -10,20 +9,8 @@ import { localPoint } from "@visx/event";
 import { bisector, extent } from "d3-array";
 import { Bar, Line, LinePath } from "@visx/shape";
 import { curveMonotoneX } from "@visx/curve";
-
-type Data = [number, number];
-
-const getPrices = async () => {
-  const res = await fetch(
-    "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
-  );
-
-  const data = await res.json();
-
-  const prices = data.prices;
-
-  return prices;
-};
+import { usePrices } from '../../services/queries/Dashboard';
+import { Data } from '../../types/ApiTypes'
 
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -49,7 +36,7 @@ const tooltipStyles = {
 };
 
 const Chart = () => {
-  const { data, error, isLoading } = useQuery<Data[]>("prices", getPrices);
+  const { data, error, isLoading } = usePrices();
   const [ref, { width, height }] = useMeasure();
   const { nightMode } = useTheme();
   
@@ -91,7 +78,7 @@ const Chart = () => {
         width="100%"
         height="100%"
         viewBox={`0 0 ${width} ${height}`}
-        className={`relative rounded-md text-black bg-white dark:bg-gray-700 dark:text-white`}
+        className={`relative rounded-md text-black bg-gray-200 dark:bg-gray-700 dark:text-white`}
       >
         <Group>
           <LinePath<Data>

@@ -1,10 +1,22 @@
+import browserUsage, { BrowserUsage } from '@visx/mock-data/lib/mocks/browserUsage';
 import LineChart from "../components/charts/LineChart";
 import BarChart from "../components/charts/BarChart";
 import PieChart from "../components/charts/PieChart";
 import ScatterPlotChart from "../components/charts/ScatterPlotChart";
+import PieChartLegent from "../components/charts/PieChartLegent";
 import { Box } from "react-feather";
 
-const pieData = [{label: 'Apple', value: 12},{label: 'Avocado', value: 32},{label: 'Mango', value: 22},{label: 'Berry', value: 8}]
+const transformData = (data: BrowserUsage) => {
+  const { date, ...rest } = data;
+  const transformed = Object.entries(rest).map(([label, value]) => {
+    return { label, value: parseFloat(value) };
+  });
+
+  return transformed;
+};
+
+const pieData = transformData(browserUsage[0]); /* [transformData(browserUsage[0])] */;
+
 const scatterPlotData = [{x: 12, y: 13},{x: 14, y: 15},{x: 10, y: 12},{x: 4, y: 8},{x: 23, y: 12},{x: 24, y: 45},{x: 23, y: 54},{x: 23, y: 34}];
 
 const Dashboard = () => {
@@ -33,19 +45,21 @@ const Dashboard = () => {
         </div>
         <div className={`w-full sm:w-1/2 md:w-1/4 rounded-md relative p-1`}>
           <div style={{height: chartHeight200}}>
-            <ScatterPlotChart data={scatterPlotData}/>
+            <PieChartLegent data={pieData} />
           </div>
         </div>
       </div>
 
       {/* Center Row */}
       <div className={`flex flex-wrap`}>
-        <div className="w-full sm:w-2/3 md:w-3/4 relative p-1" style={{height: chartHeight300}}>
+        <div className="w-full sm:w-2/3 md:w-3/4 relative p-1">
+          <div style={{height: chartHeight300}}>
             <LineChart />
+          </div>
         </div>
         <div className={`w-full sm:w-1/3 md:w-1/4 rounded-md relative p-1`}>
           <div style={{height: chartHeight300}}>
-          <BarChart/>
+          <ScatterPlotChart data={scatterPlotData}/>
           </div>
         </div>
       </div>

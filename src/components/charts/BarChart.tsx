@@ -71,7 +71,7 @@ function BarChart() {
       width="100%"
       height="100%"
       viewBox={`0 0 ${width} ${height}`}
-      className={`relative rounded-md text-black bg-white dark:bg-gray-700 dark:text-white`}
+      className={`relative rounded-md text-black bg-gray-200 dark:bg-gray-700 dark:text-white`}
     >
     <Group>{data.map((d) => {
       const xValue = getXValue(d);
@@ -114,9 +114,9 @@ function BarChart() {
           left={margin}
           hideAxisLine 
           scale={yScale} 
-          tickStroke={nightMode === 'dark' ? '#fff' : '#000'}
+          tickStroke={nightMode === 'dark' ? 'white' : 'black'}
           tickLabelProps={() => ({
-            fill: nightMode === 'dark' ? '#fff' : '#000',
+            fill: nightMode === 'dark' ? 'white' : 'black',
             fontSize: 10,
             textAnchor: 'end',
             dy: '0.33em',
@@ -124,7 +124,7 @@ function BarChart() {
           <Line
             from={{ x: margin, y: margin }} 
             to={{ x: margin, y: innerHeight }} 
-            stroke={nightMode === 'dark' ? '#fff' : '#000'}
+            stroke={nightMode === 'dark' ? 'white' : 'black'}
           />
       </Group>
     </svg>
