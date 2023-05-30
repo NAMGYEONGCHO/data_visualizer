@@ -12,7 +12,7 @@ const ScatterPlot: React.FC<ScatterProps> = ({ data }) => {
   const svgRef = useRef<SVGSVGElement | null>(null);
   const { nightMode } = useTheme();
 
-  const plotColor = nightMode === 'dark' ? 'purple' : 'steelblue';
+  const plotColor = nightMode === 'dark' ? 'steelblue': 'purple';
 
   useEffect(() => {
     if (!width || !height || !svgRef.current) return; // Skip if width, height, or svgRef are not yet set
@@ -63,7 +63,10 @@ const ScatterPlot: React.FC<ScatterProps> = ({ data }) => {
 
   return (
     <div ref={ref} className="relative w-full h-full">
-      <svg ref={svgRef} className={`absolute top-0 left-0 w-full h-full`} viewBox={`0 0 ${width} ${height}`} />
+      <svg 
+        ref={svgRef} 
+        className={`absolute top-0 left-0 rounded-md w-full h-full text-white bg-white dark:bg-gray-700 dark:text-white`} 
+        viewBox={`0 0 ${width} ${height}`} />
     </div>
   );
 }
