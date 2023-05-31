@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import { Data } from '../../types/ApiTypes'
 
+// Function to fetch the price data from the API
 const getPrices = async () => {
   const res = await fetch(
     "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
@@ -18,6 +19,7 @@ const getPrices = async () => {
   return prices;
 };
 
+// Custom hook to get the price data
 export const usePrices = () => {
     const { data, error, isError, isLoading } = useQuery<Data[]>("prices", getPrices);
 
@@ -26,11 +28,11 @@ export const usePrices = () => {
     }
 
     if (isError) {
-      // Here you can handle the error, either by returning it or logging it
+      // If an error occurred during the query, log the error and return it
       console.error('An error occurred: ', error);
       return { isError: true, error };
     }
 
-    // If everything is fine, return the data
+    // If the query was successful, return the data
     return { data, isLoading: false, isError: false };
 };

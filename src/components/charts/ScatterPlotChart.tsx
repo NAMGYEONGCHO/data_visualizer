@@ -3,17 +3,23 @@ import * as d3 from 'd3';
 import useMeasure from 'react-use-measure';
 import { useTheme } from '../../ThemeContext';
 
+// Define the type of props expected by the ScatterPlot component
 interface ScatterProps {
   data: { x: number, y: number }[]
 }
 
+// Define the ScatterPlot component
 const ScatterPlot: React.FC<ScatterProps> = ({ data }) => {
+  // Use the useMeasure hook to measure the dimensions of the div
   const [ref, { width, height }] = useMeasure();
+  // Use the useRef hook to create a reference to the SVG element
   const svgRef = useRef<SVGSVGElement | null>(null);
+  // Get the nightMode value from the theme
   const { nightMode } = useTheme();
-
+  // Set the color of the scatter plot based on the nightMode
   const plotColor = nightMode === 'dark' ? 'steelblue': 'purple';
 
+  // Use the useEffect hook to draw the scatter plot
   useEffect(() => {
     if (!width || !height || !svgRef.current) return; // Skip if width, height, or svgRef are not yet set
 
@@ -39,6 +45,7 @@ const ScatterPlot: React.FC<ScatterProps> = ({ data }) => {
     const xAxis = d3.axisBottom(xScale);
     const yAxis = d3.axisLeft(yScale);
       
+    // Append a group to the SVG and translate it to account for the margins
     const group = svg.append('g')
       .attr('transform', `translate(${margin.left},${margin.top})`);
     
@@ -50,7 +57,7 @@ const ScatterPlot: React.FC<ScatterProps> = ({ data }) => {
       group.append('g')
       .call(yAxis);
 
-    // Draw points
+    // Draw the points of the scatter plot
     group.selectAll('circle')
       .data(data)
       .join('circle')
@@ -58,9 +65,10 @@ const ScatterPlot: React.FC<ScatterProps> = ({ data }) => {
       .attr('cy', d => yScale(d.y))
       .attr('r', 3)
       .attr('fill', plotColor);
-
+  // Re-render the scatter plot if the data, width, height, or plotColor changes
   }, [data, width, height, plotColor]);
 
+  // Return the SVG element inside a div
   return (
     <div ref={ref} className="relative w-full h-full">
       <svg 

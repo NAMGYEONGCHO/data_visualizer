@@ -1,5 +1,10 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
+/**
+ * At this point, this reducer is not currently in use. 
+ * The existing query client adequately manages our data handling needs. 
+ * However, this reducer remains available for potential future requirements.
+ * */  
 interface DataState {
   data: any[];
 }

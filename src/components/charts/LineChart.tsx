@@ -12,15 +12,19 @@ import { curveMonotoneX } from '@visx/curve';
 import { usePrices } from '../../services/queries/Dashboard';
 import { Data } from '../../types/ApiTypes'
 
+// Define a number formatter for displaying USD currency
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
   currency: "USD",
 });
 
+// Getter functions to extract x and y values from data points
 const getXValue = (d: Data) => new Date(d[0]);
 const getYValue = (d: Data) => d[1];
+// Define a bisector function for determining closest data point
 const bisectDate = bisector<Data, Date>(getXValue).left;
 
+// Define default styles for tooltip
 const tooltipStyles = {
   ...defaultStyles,
   position: 'absolute' as 'absolute',
@@ -35,7 +39,9 @@ const tooltipStyles = {
     '-apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif',
 };
 
-const Chart = () => {
+// Main Chart component
+const LineChart = () => {
+  // Hooks for fetching price data, measuring the SVG dimensions, managing tooltip state, and getting current theme
   const { data, error, isLoading } = usePrices();
   const [ref, { width, height }] = useMeasure();
   const { nightMode } = useTheme();
@@ -50,12 +56,12 @@ const Chart = () => {
     tooltipTop = 0,
   } = useTooltip<Data>();
 
+  // Handle loading, error, and empty data states
   if (isLoading) return <>loading</>;
-
   if (error) return <>error</>;
-
   if (!data) return null;
 
+  // Define scales for positioning elements along x and y axis
   const xScale = scaleTime({
     range: [0, width],
     domain: extent(data, getXValue) as [Date, Date],
@@ -71,6 +77,7 @@ const Chart = () => {
     nice: true,
   });
   
+  // Render the Chart component
   return (
     <>
       <svg
@@ -81,6 +88,7 @@ const Chart = () => {
         className={`relative rounded-md text-black bg-gray-200 dark:bg-gray-700 dark:text-white`}
       >
         <Group>
+          {/* Draw the LinePath for the chart using the provided data */}
           <LinePath<Data>
             key={nightMode}
             data={data}
@@ -93,6 +101,7 @@ const Chart = () => {
         </Group>
 
         <Group>
+          {/* Draw the transparent bar for catching mouse events */}
           <Bar
             width={width}
             height={height}
@@ -100,6 +109,7 @@ const Chart = () => {
             onMouseMove={(
               event: TouchEvent<SVGRectElement> | MouseEvent<SVGRectElement>
             ) => {
+              /* Get x-coordinate of the mouse cursor */
               const { x } = localPoint(event) || { x: 0 };
               const x0 = xScale.invert(x);
               const index = bisectDate(data, x0, 1);
@@ -107,12 +117,14 @@ const Chart = () => {
               const d1 = data[index];
               let d = d0;
               if (d1 && getXValue(d1)) {
+                /* Determine whether the cursor is closer to the previous or the next data point */
                 d =
                   x0.valueOf() - getXValue(d0).valueOf() >
                   getXValue(d1).valueOf() - x0.valueOf()
                     ? d1
                     : d0;
               }
+              /* Show the tooltip at the position of the closest data point */
               showTooltip({
                 tooltipData: d,
                 tooltipLeft: x,
@@ -122,7 +134,7 @@ const Chart = () => {
             onMouseLeave={() => hideTooltip()}
           />
         </Group>
-
+        {/* Draw vertical line and circles at the position of the tooltip */}
         {tooltipData ? (
           <Group>
             <Line
@@ -151,7 +163,7 @@ const Chart = () => {
           </Group>
         ) : null}
       </svg>
-
+      {/* Render tooltip if tooltip data is available */}
       {tooltipData ? (
         <TooltipWithBounds
           key={Math.random()}
@@ -167,4 +179,4 @@ const Chart = () => {
   );
 };
 
-export default Chart;
+export default LineChart;
