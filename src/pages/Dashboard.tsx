@@ -1,10 +1,10 @@
 import browserUsage, { BrowserUsage } from '@visx/mock-data/lib/mocks/browserUsage';
-import LineChart from "../components/charts/LineChart";
-import BarChart from "../components/charts/BarChart";
-import PieChart from "../components/charts/PieChart";
-import ScatterPlotChart from "../components/charts/ScatterPlotChart";
-import PieChartLegent from "../components/charts/PieChartLegent";
-import { Box } from "react-feather";
+import LineChart from '../components/charts/LineChart';
+import BarChart from '../components/charts/BarChart';
+import PieChart from '../components/charts/PieChart';
+import ScatterPlotChart from '../components/charts/ScatterPlotChart';
+import PieChartLegent from '../components/charts/PieChartLegent';
+import { Box } from 'react-feather';
 
 const transformData = (data: BrowserUsage) => {
   const { date, ...rest } = data;

@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { ThemeContext } from './ThemeContext';
 import { Routes, Route } from 'react-router-dom';
 import useNightMode from './hooks/useNightMode';
 import Dashboard from './pages/Dashboard';
 import { Moon, Sun } from 'react-feather';
+
 const body_colorset = "text-black bg-sunlight dark:bg-dblue dark:text-white ";
 const appbar_colorset = "text-black bg-white-500 dark:bg-dblue dark:text-white ";
 const sidebar_colorset = "text-black bg-sidebar border-2 border-blue-200 rounded-md dark:border-yellow-200 dark:bg-gray-700 dark:text-white ";

@@ -1,14 +1,14 @@
 import { useTheme } from '../../ThemeContext';
-import { TouchEvent, MouseEvent } from "react";
-import useMeasure from "react-use-measure";
-import { TooltipWithBounds, useTooltip, defaultStyles } from "@visx/tooltip";
-import { timeFormat } from "d3-time-format";
-import { Group } from "@visx/group";
-import { scaleLinear, scaleTime } from "@visx/scale";
-import { localPoint } from "@visx/event";
-import { bisector, extent } from "d3-array";
-import { Bar, Line, LinePath } from "@visx/shape";
-import { curveMonotoneX } from "@visx/curve";
+import { TouchEvent, MouseEvent } from 'react';
+import useMeasure from 'react-use-measure';
+import { TooltipWithBounds, useTooltip, defaultStyles } from '@visx/tooltip';
+import { timeFormat } from 'd3-time-format';
+import { Group } from '@visx/group';
+import { scaleLinear, scaleTime } from '@visx/scale';
+import { localPoint } from '@visx/event';
+import { bisector, extent } from 'd3-array';
+import { Bar, Line, LinePath } from '@visx/shape';
+import { curveMonotoneX } from '@visx/curve';
 import { usePrices } from '../../services/queries/Dashboard';
 import { Data } from '../../types/ApiTypes'
 
